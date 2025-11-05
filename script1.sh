@@ -38,7 +38,7 @@ aws ec2 authorize-security-group-ingress \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]'
 
 aws ec2 create-tags \
-  --resources $GS_ID \
+  --resources $SG_ID \
   --tags "Key=Name,Value=migruposeguridad" 
 
 
@@ -48,9 +48,11 @@ EC2_ID=$(aws ec2 run-instances \
     --instance-type t2.micro \
     --key-name vockey \
     --subnet-id $SUB_ID \
+    --security-group-ids $SG_ID \
     --associate-public-ip-address \
     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=miec2}]' \
     --query Instances.InstanceId --output text)
+
 
 sleep 15
 
