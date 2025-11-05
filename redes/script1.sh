@@ -1,6 +1,6 @@
 #creo la vpc y devuelvo su id
 VPC_ID=$(aws ec2 create-vpc --cidr-block 192.168.3.0/24 \
-    --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=nube3jorge}]' \
+    --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=nube1jorge}]' \
     --query Vpc.VpcId --output text)
 
 #muestro el id de la vpc
@@ -35,7 +35,7 @@ echo $SG_ID
 
 aws ec2 authorize-security-group-ingress \
   --group-id $SG_ID \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]' 
 
 aws ec2 create-tags \
   --resources $SG_ID \
@@ -44,20 +44,13 @@ aws ec2 create-tags \
 
 #creo un ec2
 EC2_ID=$(aws ec2 run-instances \
-    --image-id ami-0360c520857e3138f \
-    --instance-type t2.micro \
+    --image-id ami-0ecb62995f68bb549 \
+    --instance-type t3.micro \
     --key-name vockey \
     --subnet-id $SUB_ID \
     --security-group-ids $SG_ID \
     --associate-public-ip-address \
     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=miec2}]' \
     --query Instances.InstanceId --output text)
-
-
-sleep 15
-
-echo $EC2_ID
-
-
 
 
